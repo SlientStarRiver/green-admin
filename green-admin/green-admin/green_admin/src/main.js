@@ -2,15 +2,17 @@ import Vue from 'vue'
 import App from './App.vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import router from './router'//路由切换页面
-// import HomeBox from '@/home/HomeBox.vue'
+import router from './router'
 
 Vue.use(ElementUI)
-// Vue.use(router)
-// 全局注册 homebox，HeadWeb.vue 只需在模板使用 <homebox />
-// Vue.component('HomeBox', HomeBox)
 
 Vue.config.productionTip = false
+
+// 抑制 Vue Router 守卫重定向产生的 NavigationRedirected 错误
+Vue.config.errorHandler = (err) => {
+    if (err.name === 'NavigationRedirected') return;
+    console.error(err);
+};
 
 new Vue({
   router,

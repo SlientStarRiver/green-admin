@@ -14,7 +14,7 @@
           </div>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>退出登录</el-dropdown-item>
+              <el-dropdown-item @click.native="handleLogout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { getToken } from '@/utils/setToken'
+import { getToken, removeToken } from '@/utils/setToken'
 import HomeBox from '@/home/HomeBox.vue'
 import BlockBox from '@/home/BlockBox.vue'
 import PlantsBox from '@/home/PlantsBox.vue';
@@ -103,31 +103,16 @@ export default {
   },
   methods: {
     showView(name) {
-      // 明确映射：传入 name -> activeView / activeMenu
-      if (name === 'home' || name === 'dashboard') {
-        this.activeView = 'home'
-        this.activeMenu = 'dashboard'
-      } else if (name === 'blocks') {
-        this.activeView = 'blocks'
-        this.activeMenu = 'blocks'
-      } else if (name === 'plants') {
-        this.activeView = 'plants'
-        this.activeMenu = 'plants'
-      } else if (name === 'users') {
-        this.activeView = 'users'
-        this.activeMenu = 'users'
-      } else if (name === 'plantrecord') {
-        this.activeView = 'plantrecord'
-        this.activeMenu = 'plantrecord'
-      } else if (name === 'Maintenancerecord') {
-        this.activeView = 'Maintenancerecord'
-        this.activeMenu = 'Maintenancerecord'
-      }
-      else {
-        // 兜底：保持传入值一致（赋值）
-        this.activeView = name
-        this.activeMenu = name
-      }
+      const menuMap = {
+        home: 'dashboard',
+        blocks: 'blocks',
+        plants: 'plants',
+        users: 'users',
+        plantrecord: 'records-1',
+        Maintenancerecord: 'records-2'
+      };
+      this.activeView = name;
+      this.activeMenu = menuMap[name] || name;
     },
     // 辅助加载图片（保留回退）
     img(filename) {
@@ -135,7 +120,11 @@ export default {
     },
     // 点击头像：无条件跳转到登录页（忽略当前登录状态）
     goLogin() {
-      console.log('头像点击：goLogin 触发', this.$route && this.$route.path);
+      this.$router.push('/LoginBox');
+    },
+    handleLogout() {
+      removeToken();
+      this.$message.success('已退出登录');
       this.$router.push('/LoginBox');
     }
   }

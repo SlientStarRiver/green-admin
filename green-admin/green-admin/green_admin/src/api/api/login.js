@@ -1,16 +1,25 @@
 import service from "../config";
-export function login(data) {
+
+export function userLogin(data) {
     return service({
-        url: "/auth/login",
+        url: "/auth/user/login",
         method: "post",
         data
     });
 }
 
-// export function register(data) {
-//     return service({
-//         url: "/user/register/",
-//         method: "post",
-//         data
-//     });
-// }
+export function adminLogin(data) {
+    return service({
+        url: "/auth/admin/login",
+        method: "post",
+        data
+    });
+}
+
+export function register(data) {
+    return service({
+        url: "/auth/register",
+        method: "post",
+        data
+    });
+}

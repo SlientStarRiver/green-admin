@@ -1,43 +1,42 @@
 <template>
     <div class="login-container">
         <div class="login-box">
-            <h2 class="login-title">绿化区块管理系统</h2>
-            <!-- 登录表单 + 验证 -->
-            <el-form ref="loginFormRef" :model="loginForm" :rules="rules" label-width="80px" class="login-form">
+            <h2 class="login-title">注册账号</h2>
+            <el-form ref="registerFormRef" :model="registerForm" :rules="rules" label-width="80px" class="login-form">
                 <el-form-item label="用户名" prop="username">
-                    <el-input v-model="loginForm.username" placeholder="请输入用户名" prefix-icon="el-icon-user"></el-input>
+                    <el-input v-model="registerForm.username" placeholder="请输入用户名" prefix-icon="el-icon-user"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                    <el-input v-model="loginForm.password" type="password" placeholder="请输入密码"
+                    <el-input v-model="registerForm.password" type="password" placeholder="请输入密码"
                         prefix-icon="el-icon-lock"></el-input>
                 </el-form-item>
-                
+                <el-form-item label="手机号" prop="phone">
+                    <el-input v-model="registerForm.phone" placeholder="请输入手机号" prefix-icon="el-icon-phone"></el-input>
+                </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" class="login-btn" @click="handleLogin" style="width: 100%">
-                        登录
+                    <el-button type="primary" class="login-btn" @click="handleRegister" style="width: 100%">
+                        注册
                     </el-button>
                 </el-form-item>
+                <div class="login-link">
+                    已有账号？<router-link to="/LoginBox">去登录</router-link>
+                </div>
             </el-form>
         </div>
     </div>
 </template>
 
 <script>
-import {login} from '@/api/api/login.js';
-import { setToken } from '@/utils/setToken';
-import { EventBus } from '@/utils/eventBus'
+import { register } from '@/api/api/login.js';
 export default {
-    name: 'LoginBox',
-    // 核心：必须在 data 中定义模板引用的变量
+    name: 'RegisterBox',
     data() {
         return {
-            // 登录表单数据（模板中用到的 loginForm）
-            loginForm: {
-                username: '', // 用户名
-                password: '', // 密码
-                code: ''      // 验证码
+            registerForm: {
+                username: '',
+                password: '',
+                phone: ''
             },
-            // 表单验证规则（模板中用到的 rules）
             rules: {
                 username: [
                     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -47,44 +46,31 @@ export default {
                     { required: true, message: '请输入密码', trigger: 'blur' },
                     { min: 6, message: '密码长度不少于 6 个字符', trigger: 'blur' }
                 ],
-                code: [
-                    { required: true, message: '请输入验证码', trigger: 'blur' },
-                    { length: 4, message: '验证码长度为 4 个字符', trigger: 'blur' }
+                phone: [
+                    { required: true, message: '请输入手机号', trigger: 'blur' },
+                    { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' }
                 ]
             }
         };
     },
     methods: {
-        handleLogin() {
-            if (!this.loginForm.username) {
-                this.$message.error('请输入用户名');
-            }
-            else if (!this.loginForm.password) {
-                this.$message.error('请输入密码');
-            }
-            else {
-                console.log('日志测试1');
-                login(this.loginForm)
+        handleRegister() {
+            this.$refs.registerFormRef.validate(valid => {
+                if (!valid) return;
+                register(this.registerForm)
                     .then(res => {
-                        
-                        const { status, data } = res
-                        if (status == 0) {
-                            const token = 'Bearer' + ' ' + data.access_token
-                            setToken(token)
-                            localStorage.setItem('id', data.id)
-                            this.$message.success('登陆成功');
-                            this.$router.push('/HeadBox');
-                            EventBus.$emit('token-changed', token);
+                        if (res.code === 200) {
+                            this.$message.success('注册成功，请登录');
+                            this.$router.push('/LoginBox');
                         } else {
-                            
-                            this.$message.error(res.msg)
+                            this.$message.error(res.message || '注册失败');
                         }
                     })
-                    .catch(err => {
-                        console.log(err);
-                    })
-            }
-        },
+                    .catch(() => {
+                        this.$message.error('网络异常，注册失败');
+                    });
+            });
+        }
     }
 };
 </script>
@@ -126,12 +112,19 @@ export default {
     font-size: 16px;
 }
 
-.code-img {
+.login-link {
     text-align: center;
-    height: 40px;
-    line-height: 40px;
-    background: #f5f5f5;
-    border-radius: 4px;
-    overflow: hidden;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.login-link a {
+    color: #006B3E;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
 }
 </style>
