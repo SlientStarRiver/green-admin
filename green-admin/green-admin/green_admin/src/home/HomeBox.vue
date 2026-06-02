@@ -69,11 +69,11 @@
                             </el-card>
                         </el-col>
                         <el-col :span="12">
-                            <el-card class="chart-card">
+                            <el-card class="bigbox">
                                 <template #header>
                                     <div class="card-header"><span>种植/养护统计</span></div>
                                 </template>
-                                <div ref="barChart" style="width: 100%; height: 300px;"></div>
+                                <div ref="barChart" style="width: 100%; height: 100%;"></div>
                             </el-card>
                         </el-col>
                     </el-row>
@@ -212,7 +212,8 @@ export default {
 .stat-card { text-align: center; border-radius: 8px; box-shadow: 0 1px 4px rgba(16, 36, 19, 0.06); padding: 50px 5px; }
 .card-header { color: #7f8b8a; font-size: 20px; font-weight: 700; }
 .card-header11 { color: #006B3E; font-size: 20px; font-weight: 700; margin-bottom: 12px; }
-.bigbox { width: 100%; box-sizing: border-box; }
+.bigbox { width: 100%; box-sizing: border-box; display: flex; flex-direction: column; }
+.bigbox .el-card__body { flex: 1; display: flex; flex-direction: column; }
 .chart-card { width: 100%; box-sizing: border-box; }
 .green { background-color: rgba(240, 250, 244, 0.81); padding: 8px; border-radius: 8px; margin-bottom: 12px; }
 .green ul { margin: 0; padding-left: 20px; font-size: 14px; color: #3D3D3D; line-height: 1.6; }
