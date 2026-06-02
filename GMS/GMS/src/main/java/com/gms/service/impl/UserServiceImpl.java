@@ -38,13 +38,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public Result getUserPage(Integer page, Integer size) {
         try {
-            // 1. 创建分页对象
             Page<User> pageParam = new Page<>(page, size);
-
-            // 2. 执行分页查询
             Page<User> userPage = this.page(pageParam);
 
-            // 3. 构建分页响应数据
+            // 隐藏所有用户的密码
+            userPage.getRecords().forEach(u -> u.setPassword(null));
+
             Map<String, Object> data = new HashMap<>();
             data.put("records", userPage.getRecords());
             data.put("currentPage", userPage.getCurrent());
@@ -52,7 +51,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             data.put("hasPrevious", userPage.hasPrevious());
             data.put("hasNext", userPage.hasNext());
 
-            // 4. 返回统一结果
             return Result.success(data);
         } catch (Exception e) {
             return Result.error("获取用户列表失败: " + e.getMessage());
