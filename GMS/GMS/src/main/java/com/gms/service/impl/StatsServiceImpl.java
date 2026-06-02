@@ -94,21 +94,15 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public Result getRecentActivities() {
         try {
-            // 获取最近7天的种植活动
-            LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
-
+            // 获取最近的种植活动（不限时间）
             QueryWrapper<PlantingRecord> plantingWrapper = new QueryWrapper<>();
-            plantingWrapper.ge("planting_time", sevenDaysAgo)
-                    .orderByDesc("planting_time")
-                    .last("LIMIT 10");
+            plantingWrapper.orderByDesc("planting_time").last("LIMIT 10");
 
             List<PlantingRecord> plantingRecords = plantingRecordService.list(plantingWrapper);
 
-            // 获取最近7天的养护活动
+            // 获取最近的养护活动（不限时间）
             QueryWrapper<MaintenanceRecord> maintenanceWrapper = new QueryWrapper<>();
-            maintenanceWrapper.ge("maintenance_time", sevenDaysAgo)
-                    .orderByDesc("maintenance_time")
-                    .last("LIMIT 10");
+            maintenanceWrapper.orderByDesc("maintenance_time").last("LIMIT 10");
 
             List<MaintenanceRecord> maintenanceRecords = maintenanceRecordService.list(maintenanceWrapper);
 
