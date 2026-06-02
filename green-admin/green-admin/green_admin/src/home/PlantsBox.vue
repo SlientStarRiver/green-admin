@@ -24,6 +24,12 @@
                     <el-table-column prop="speciesId" label="品种编号" width="160" sortable />
                     <el-table-column prop="speciesName" label="品种名" sortable />
                     <el-table-column prop="createdTime" label="创建时间" sortable />
+                    <el-table-column label="操作" width="160" fixed="right">
+                        <template slot-scope="scope">
+                            <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
+                            <el-button size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row)" style="margin-left:8px;">删除</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
 
                 <div class="table-footer" v-if="total > 0">
@@ -35,10 +41,10 @@
                 </div>
             </div>
 
-            <el-dialog title="新增植物品种" :visible.sync="dialogVisible" width="500px" :close-on-click-modal="false">
+            <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="500px" :close-on-click-modal="false">
                 <el-form :model="editForm" :rules="formRules" ref="editFormRef" label-width="80px">
                     <el-form-item label="品种编号" prop="speciesId">
-                        <el-input v-model="editForm.speciesId" placeholder="如 ZW008" />
+                        <el-input v-model="editForm.speciesId" :disabled="isEdit" placeholder="如 ZW008" />
                     </el-form-item>
                     <el-form-item label="品种名称" prop="speciesName">
                         <el-input v-model="editForm.speciesName" placeholder="请输入品种名称" />
@@ -54,7 +60,7 @@
 </template>
 
 <script>
-import { getSpeciesList, createSpecies } from '@/api/api/species'
+import { getSpeciesList, createSpecies, updateSpecies, deleteSpecies } from '@/api/api/species'
 
 export default {
     name: 'PlantsBox',
@@ -68,12 +74,18 @@ export default {
             loading: false,
             saving: false,
             dialogVisible: false,
+            isEdit: false,
             editForm: { speciesId: '', speciesName: '' },
             formRules: {
                 speciesId: [{ required: true, message: '请输入品种编号', trigger: 'blur' }],
                 speciesName: [{ required: true, message: '请输入品种名称', trigger: 'blur' }]
             },
             searchTimer: null
+        }
+    },
+    computed: {
+        dialogTitle() {
+            return this.isEdit ? '编辑植物品种' : '新增植物品种'
         }
     },
     created() {
@@ -115,9 +127,32 @@ export default {
             this.loadData()
         },
         handleAdd() {
+            this.isEdit = false
             this.editForm = { speciesId: '', speciesName: '' }
             this.dialogVisible = true
             this.$nextTick(() => this.$refs.editFormRef && this.$refs.editFormRef.clearValidate())
+        },
+        handleEdit(row) {
+            this.isEdit = true
+            this.editForm = { ...row }
+            this.dialogVisible = true
+            this.$nextTick(() => this.$refs.editFormRef && this.$refs.editFormRef.clearValidate())
+        },
+        async handleDelete(row) {
+            try {
+                await this.$confirm(`确定删除品种 "${row.speciesName}" 吗？`, '删除确认', {
+                    confirmButtonText: '删除', cancelButtonText: '取消', type: 'warning'
+                })
+                const res = await deleteSpecies(row.speciesId)
+                if (res.code === 200) {
+                    this.$message.success('删除成功')
+                    this.loadData()
+                } else {
+                    this.$message.error(res.message)
+                }
+            } catch (e) {
+                if (e !== 'cancel') this.$message.error('删除失败')
+            }
         },
         async saveItem() {
             try {
@@ -127,9 +162,14 @@ export default {
             }
             this.saving = true
             try {
-                const res = await createSpecies(this.editForm)
+                let res
+                if (this.isEdit) {
+                    res = await updateSpecies(this.editForm.speciesId, this.editForm)
+                } else {
+                    res = await createSpecies(this.editForm)
+                }
                 if (res.code === 200) {
-                    this.$message.success('创建成功')
+                    this.$message.success(this.isEdit ? '更新成功' : '创建成功')
                     this.dialogVisible = false
                     this.loadData()
                 } else {
