@@ -8,11 +8,17 @@ Vue.use(ElementUI)
 
 Vue.config.productionTip = false
 
-// 抑制 Vue Router 守卫重定向产生的 NavigationRedirected 错误
+// 全局抑制 Vue Router NavigationRedirected 错误
 Vue.config.errorHandler = (err) => {
     if (err.name === 'NavigationRedirected') return;
     console.error(err);
 };
+
+window.addEventListener('unhandledrejection', (event) => {
+    if (event.reason && event.reason.name === 'NavigationRedirected') {
+        event.preventDefault();
+    }
+});
 
 new Vue({
   router,
