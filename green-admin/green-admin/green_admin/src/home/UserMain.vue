@@ -88,7 +88,7 @@ export default {
     },
     async handleLogout() {
       try {
-        const res = await userLogout()
+        await userLogout()
         removeToken()
         this.$message.success('退出登录成功')
         this.$router.push('/LoginBox')
