@@ -1,23 +1,12 @@
 <template>
   <div id="app">
-    <!-- 有些路由（如 LoginBox）不需要 layout（meta.noLayout = true） -->
-    <!-- <HeadWeb />
-    - <router-view /> -->
-    <HeadWeb v-if="!$route.meta || !$route.meta.noLayout" />
     <router-view />
   </div>
 </template>
 
 <script>
-
-import HeadWeb from '@/components/HeadWeb.vue'  // 确保正确导入组件
-
-
 export default {
-  name: 'App',
-  components: {
-    HeadWeb
-  }
+  name: 'App'
 }
 </script>
 

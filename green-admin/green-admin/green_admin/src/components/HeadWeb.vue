@@ -62,13 +62,7 @@
       </el-aside>
 
       <el-main class="main-content">
-        <!-- 主区：根据 activeView 切换组件，Header/Aside 不变 -->
-        <HomeBox v-if="activeView === 'home'" />
-        <BlockBox v-if="activeView === 'blocks'" />
-        <PlantsBox v-if="activeView === 'plants'" />
-        <UserBox v-if="activeView === 'users'" />
-        <MaintenanceRecord v-if="activeView === 'Maintenancerecord'" />
-        <PlantsRecord v-if="activeView === 'plantrecord'" />
+        <router-view />
       </el-main>
     </div>
   </el-container>
@@ -76,20 +70,11 @@
 
 <script>
 import { getToken, removeToken } from '@/utils/setToken'
-import HomeBox from '@/home/HomeBox.vue'
-import BlockBox from '@/home/BlockBox.vue'
-import PlantsBox from '@/home/PlantsBox.vue';
-import UserBox from '@/home/UserBox.vue';
-import PlantsRecord from '@/home/PlantsRecord.vue';
-import MaintenanceRecord from '@/home/MaintenanceRecord.vue';
 import img1 from '@/assets/img/白底头像.jpg';
 import img2 from '@/assets/img/img4.png';
 export default {
-  components: { HomeBox, BlockBox, PlantsBox, UserBox, PlantsRecord, MaintenanceRecord },
   data() {
     return {
-      activeView: 'home',
-      activeMenu: 'dashboard',
       logoSrc: '/green_admin/img/logo1.0.png',
       img1: img1,
       img2: img2,
@@ -99,20 +84,22 @@ export default {
   computed: {
     avatarSrc() {
       return this.dynamicToken ? this.img2 : this.img1;
+    },
+    activeMenu() {
+      const menuMap = {
+        '/home': 'dashboard',
+        '/blocks': 'blocks',
+        '/plants': 'plants',
+        '/users': 'users',
+        '/plantrecord': 'records-1',
+        '/Maintenancerecord': 'records-2'
+      };
+      return menuMap[this.$route.path] || 'dashboard';
     }
   },
   methods: {
-    showView(name) {
-      const menuMap = {
-        home: 'dashboard',
-        blocks: 'blocks',
-        plants: 'plants',
-        users: 'users',
-        plantrecord: 'records-1',
-        Maintenancerecord: 'records-2'
-      };
-      this.activeView = name;
-      this.activeMenu = menuMap[name] || name;
+    showView(path) {
+      this.$router.push('/' + path);
     },
     // 辅助加载图片（保留回退）
     img(filename) {
