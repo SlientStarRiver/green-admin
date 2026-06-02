@@ -43,6 +43,8 @@ tags:
     description: 养护记录的增删改查
   - name: 统计
     description: 首页统计数据
+  - name: 操作日志
+    description: 操作日志查询
 
 paths:
   /auth/user/login:
@@ -508,6 +510,101 @@ paths:
               schema:
                 $ref: '#/components/schemas/PlantDistribution'
 
+  /auth/user/info:
+    get:
+      tags: [认证]
+      summary: 获取当前用户信息
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+
+  /auth/change-password:
+    post:
+      tags: [认证]
+      summary: 修改密码
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId, oldPassword, newPassword]
+              properties:
+                userId:
+                  type: string
+                oldPassword:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        '200':
+          description: 修改成功
+
+  /admin/plants/species/{speciesId}:
+    put:
+      tags: [植物品种]
+      summary: 更新植物品种
+      parameters:
+        - name: speciesId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpeciesCreate'
+      responses:
+        '200':
+          description: 更新成功
+    delete:
+      tags: [植物品种]
+      summary: 删除植物品种
+      parameters:
+        - name: speciesId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 删除成功
+
+  /admin/logs:
+    get:
+      tags: [操作日志]
+      summary: 获取操作日志列表
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 15
+        - name: username
+          in: query
+          schema:
+            type: string
+        - name: module
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功
+
 components:
   schemas:
     TokenResponse:
@@ -524,6 +621,8 @@ components:
           properties:
             token:
               type: string
+            userId:
+              type: integer
 
     User:
       type: object
