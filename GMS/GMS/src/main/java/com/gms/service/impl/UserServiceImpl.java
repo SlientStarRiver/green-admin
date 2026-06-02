@@ -137,8 +137,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             if (needUpdate) {
                 boolean success = this.updateById(existingUser);
                 if (success) {
-                    operationLogService.log(id, existingUser.getUsername(), "更新用户", "用户管理",
-                        "更新用户: " + existingUser.getUsername(), null);
                     return Result.success("更新成功");
                 } else {
                     return Result.error("更新失败");
@@ -161,8 +159,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
             boolean success = this.removeById(id);
             if (success) {
-                operationLogService.log(id, existingUser.getUsername(), "删除用户", "用户管理",
-                    "删除用户: " + existingUser.getUsername(), null);
                 return Result.success("删除成功");
             } else {
                 return Result.error("删除失败");

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gms.pojo.Area;
 import com.gms.service.AreaService;
-import com.gms.service.OperationLogService;
 import com.gms.mapper.AreaMapper;
 import com.gms.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,6 @@ import java.util.Map;
 @Service
 public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area>
     implements AreaService{
-
-    @Autowired
-    private OperationLogService operationLogService;
 
     @Override
     public Result getAreaPage(Integer page, Integer size, String areaName) {
@@ -73,10 +69,6 @@ public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area>
             }
 
             boolean success = save(area);
-            if (success) {
-                operationLogService.log(null, "system", "新增区块", "区块管理",
-                    "新增区块: " + area.getAreaName() + " (" + area.getAreaId() + ")", null);
-            }
             return success ? Result.success("创建成功") : Result.error("创建失败");
         } catch (Exception e) {
             return Result.error("创建区块失败: " + e.getMessage());
@@ -99,10 +91,6 @@ public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area>
 
             area.setAreaId(areaId);
             boolean success = updateById(area);
-            if (success) {
-                operationLogService.log(null, "system", "更新区块", "区块管理",
-                    "更新区块: " + areaId, null);
-            }
             return success ? Result.success("更新成功") : Result.error("更新失败");
         } catch (Exception e) {
             return Result.error("更新区块失败: " + e.getMessage());
@@ -118,10 +106,6 @@ public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area>
             }
 
             boolean success = removeById(areaId);
-            if (success) {
-                operationLogService.log(null, "system", "删除区块", "区块管理",
-                    "删除区块: " + areaId + " (" + existingArea.getAreaName() + ")", null);
-            }
             return success ? Result.success("删除成功") : Result.error("删除失败");
         } catch (Exception e) {
             return Result.error("删除区块失败: " + e.getMessage());
