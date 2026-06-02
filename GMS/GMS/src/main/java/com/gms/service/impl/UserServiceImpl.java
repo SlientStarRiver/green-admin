@@ -219,6 +219,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             // 构建响应数据
             Map<String, Object> data = new HashMap<>();
             data.put("token", token);
+            data.put("userId", user.getId());
 
             return Result.success("登录成功", data);
         } catch (Exception e) {
@@ -249,6 +250,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             // 构建响应数据
             Map<String, Object> data = new HashMap<>();
             data.put("token", token);
+            data.put("userId", user.getId());
 
             return Result.success("登录成功", data);
         } catch (Exception e) {

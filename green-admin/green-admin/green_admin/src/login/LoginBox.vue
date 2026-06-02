@@ -78,6 +78,7 @@ export default {
                 if (res.code === 200) {
                     const token = 'Bearer ' + res.data.token;
                     setToken(token);
+                    localStorage.setItem('id', res.data.userId);
                     this.$message.success(res.message || '登录成功');
 
                     if (this.loginForm.identity === '管理员') {

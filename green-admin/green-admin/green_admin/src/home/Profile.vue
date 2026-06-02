@@ -7,19 +7,21 @@
 
             <el-card class="info-card">
                 <div slot="header"><span>基本信息</span></div>
-                <el-descriptions :column="2" border>
-                    <el-descriptions-item label="用户ID">{{ userInfo.id }}</el-descriptions-item>
-                    <el-descriptions-item label="用户名">{{ userInfo.username }}</el-descriptions-item>
-                    <el-descriptions-item label="手机号">{{ userInfo.phone }}</el-descriptions-item>
-                    <el-descriptions-item label="角色">
-                        <el-tag :type="userInfo.role === 'ADMIN' ? 'danger' : 'success'">
-                            {{ userInfo.role === 'ADMIN' ? '管理员' : '普通用户' }}
-                        </el-tag>
-                    </el-descriptions-item>
-                    <el-descriptions-item label="注册时间">{{ userInfo.registerTime }}</el-descriptions-item>
-                    <el-descriptions-item label="养护次数">{{ userInfo.maintenanceCount }}</el-descriptions-item>
-                    <el-descriptions-item label="种植次数">{{ userInfo.plantingCount }}</el-descriptions-item>
-                </el-descriptions>
+                <el-table :data="[userInfo]" border style="width: 100%">
+                    <el-table-column prop="id" label="用户ID" width="120" />
+                    <el-table-column prop="username" label="用户名" />
+                    <el-table-column prop="phone" label="手机号" />
+                    <el-table-column prop="role" label="角色" width="120">
+                        <template slot-scope="scope">
+                            <el-tag :type="scope.row.role === 'ADMIN' ? 'danger' : 'success'">
+                                {{ scope.row.role === 'ADMIN' ? '管理员' : '普通用户' }}
+                            </el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="registerTime" label="注册时间" />
+                    <el-table-column prop="maintenanceCount" label="养护次数" width="100" />
+                    <el-table-column prop="plantingCount" label="种植次数" width="100" />
+                </el-table>
             </el-card>
 
             <el-card class="password-card" style="margin-top: 20px;">
@@ -45,10 +47,9 @@
 
 <script>
 import { getUserInfo, changePassword } from '@/api/api/login'
-import { getToken } from '@/utils/setToken'
 
 export default {
-    name: 'Profile',
+    name: 'UserProfile',
     data() {
         const validateConfirm = (rule, value, callback) => {
             if (value !== this.passwordForm.newPassword) {

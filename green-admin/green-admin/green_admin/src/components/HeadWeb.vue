@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     showView(path) {
-      this.$router.push('/' + path);
+      this.$router.push('/HeadWeb/' + path);
     },
     // 辅助加载图片（保留回退）
     img(filename) {
