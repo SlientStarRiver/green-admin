@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gms.mapper.AreaMapper">
+
+    <resultMap id="BaseResultMap" type="com.gms.pojo.Area">
+            <id property="areaId" column="area_id" />
+            <result property="areaName" column="area_name" />
+            <result property="areaSize" column="area_size" />
+            <result property="locationDescription" column="location_description" />
+            <result property="createdTime" column="created_time" />
+            <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        area_id,area_name,area_size,location_description,created_time,updated_time
+    </sql>
+</mapper>

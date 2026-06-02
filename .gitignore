@@ -1,0 +1,31 @@
+# Java
+target/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Node
+node_modules/
+dist/
+package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Archives
+*.zip
+
+# Maven downloaded
+maven*/
+
+# Env
+.env.local

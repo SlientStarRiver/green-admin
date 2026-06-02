@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gms.mapper.PlantingRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.gms.pojo.PlantingRecord">
+            <id property="id" column="id" />
+            <result property="areaId" column="area_id" />
+            <result property="speciesId" column="species_id" />
+            <result property="plantingTime" column="planting_time" />
+            <result property="plantCount" column="plant_count" />
+            <result property="responsiblePerson" column="responsible_person" />
+            <result property="description" column="description" />
+            <result property="createdTime" column="created_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,area_id,species_id,planting_time,plant_count,responsible_person,
+        description,created_time
+    </sql>
+</mapper>

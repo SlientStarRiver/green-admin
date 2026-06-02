@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gms.mapper.MaintenanceRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.gms.pojo.MaintenanceRecord">
+            <id property="id" column="id" />
+            <result property="areaId" column="area_id" />
+            <result property="speciesId" column="species_id" />
+            <result property="maintenanceTime" column="maintenance_time" />
+            <result property="plantCount" column="plant_count" />
+            <result property="maintainer" column="maintainer" />
+            <result property="description" column="description" />
+            <result property="createdTime" column="created_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,area_id,species_id,maintenance_time,plant_count,maintainer,
+        description,created_time
+    </sql>
+</mapper>

@@ -1,0 +1,35 @@
+# server配置
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# 连接池配置
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      url: jdbc:mysql://localhost:3306/gms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    nultipart:
+      max-request-size: 40MB
+      max-file-size: 10M8
+# mybatis-plus配置
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*Mapper.xml
+  type-aliases-package: com.gms.pojo
+  global-config:
+    db-config:
+      id-type: auto #主键策略自增长
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#jwt配置
+jwt:
+  token:
+    tokenExpiration: 120 #有效时间,单位分钟
+    tokenSignKey: gms123456  #当前程序签名秘钥 自定义
