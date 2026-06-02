@@ -58,6 +58,11 @@
               <span class="menu-icon"><img src="../assets/img/用户.png" alt=""></span>
               <span class="menu-text">用户管理</span>
             </el-menu-item>
+
+            <el-menu-item index="logs" @click="showView('logs')">
+              <span class="menu-icon"><img src="../assets/img/行为.png" alt=""></span>
+              <span class="menu-text">操作日志</span>
+            </el-menu-item>
           </el-menu>
         </div>
       </el-aside>

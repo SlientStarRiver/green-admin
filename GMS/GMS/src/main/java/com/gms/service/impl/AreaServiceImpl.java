@@ -5,37 +5,32 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gms.pojo.Area;
 import com.gms.service.AreaService;
+import com.gms.service.OperationLogService;
 import com.gms.mapper.AreaMapper;
 import com.gms.utils.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
-* @author HP
-* @description 针对表【area】的数据库操作Service实现
-* @createDate 2025-11-20 13:09:55
-*/
 @Service
 public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area>
     implements AreaService{
+
+    @Autowired
+    private OperationLogService operationLogService;
+
     @Override
     public Result getAreaPage(Integer page, Integer size, String areaName) {
         try {
-            // 1. 创建分页对象
             Page<Area> pageParam = new Page<>(page, size);
-
-            // 2. 构建查询条件
             QueryWrapper<Area> queryWrapper = new QueryWrapper<>();
             if (areaName != null && !areaName.isEmpty()) {
                 queryWrapper.like("area_name", areaName);
             }
-
-            // 3. 执行分页查询
             Page<Area> areaPage = this.page(pageParam, queryWrapper);
 
-            // 4. 构建分页响应数据
             Map<String, Object> data = new HashMap<>();
             data.put("records", areaPage.getRecords());
             data.put("currentPage", areaPage.getCurrent());
@@ -43,7 +38,6 @@ public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area>
             data.put("hasPrevious", areaPage.hasPrevious());
             data.put("hasNext", areaPage.hasNext());
 
-            // 5. 返回统一结果
             return Result.success(data);
         } catch (Exception e) {
             return Result.error("获取区块列表失败: " + e.getMessage());
@@ -67,13 +61,10 @@ public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area>
     @Override
     public Result createArea(Area area) {
         try {
-            // 检查区块ID是否已存在
             Area existingArea = getById(area.getAreaId());
             if (existingArea != null) {
                 return Result.error("区块ID已存在");
             }
-
-            // 参数验证
             if (area.getAreaName() == null || area.getAreaName().trim().isEmpty()) {
                 return Result.error("区块名称不能为空");
             }
@@ -82,6 +73,10 @@ public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area>
             }
 
             boolean success = save(area);
+            if (success) {
+                operationLogService.log(null, "system", "新增区块", "区块管理",
+                    "新增区块: " + area.getAreaName() + " (" + area.getAreaId() + ")", null);
+            }
             return success ? Result.success("创建成功") : Result.error("创建失败");
         } catch (Exception e) {
             return Result.error("创建区块失败: " + e.getMessage());
@@ -95,8 +90,6 @@ public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area>
             if (existingArea == null) {
                 return Result.error("区块不存在");
             }
-
-            // 参数验证
             if (area.getAreaName() != null && area.getAreaName().trim().isEmpty()) {
                 return Result.error("区块名称不能为空");
             }
@@ -106,6 +99,10 @@ public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area>
 
             area.setAreaId(areaId);
             boolean success = updateById(area);
+            if (success) {
+                operationLogService.log(null, "system", "更新区块", "区块管理",
+                    "更新区块: " + areaId, null);
+            }
             return success ? Result.success("更新成功") : Result.error("更新失败");
         } catch (Exception e) {
             return Result.error("更新区块失败: " + e.getMessage());
@@ -121,14 +118,13 @@ public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area>
             }
 
             boolean success = removeById(areaId);
+            if (success) {
+                operationLogService.log(null, "system", "删除区块", "区块管理",
+                    "删除区块: " + areaId + " (" + existingArea.getAreaName() + ")", null);
+            }
             return success ? Result.success("删除成功") : Result.error("删除失败");
         } catch (Exception e) {
             return Result.error("删除区块失败: " + e.getMessage());
         }
     }
-
 }
-
-
-
-
