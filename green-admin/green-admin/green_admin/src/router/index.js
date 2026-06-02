@@ -17,8 +17,16 @@ const routes = [
         component: () => import('@/login/RegisterBox.vue'),
         meta: { noLayout: true }
     },
+    // 用户端路由
     {
-        path: '/',
+        path: '/UserMain',
+        name: 'UserMain',
+        component: () => import('@/home/UserMain.vue'),
+        meta: { noLayout: true }
+    },
+    // 管理员端路由
+    {
+        path: '/HeadWeb',
         component: () => import('@/components/HeadWeb.vue'),
         children: [
             { path: '', redirect: 'home' },
@@ -29,6 +37,11 @@ const routes = [
             { path: 'plantrecord', component: () => import('@/home/PlantsRecord.vue') },
             { path: 'Maintenancerecord', component: () => import('@/home/MaintenanceRecord.vue') }
         ]
+    },
+    // 根路径重定向到登录页
+    {
+        path: '/',
+        redirect: '/LoginBox'
     },
     { path: '*', redirect: '/LoginBox' }
 ];
@@ -63,7 +76,7 @@ router.beforeEach((to, from, next) => {
     if (!token && !isPublic) {
         next('/LoginBox');
     } else if (isPublic && token) {
-        next('/');
+        next('/LoginBox');
     } else {
         next();
     }

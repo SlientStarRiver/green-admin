@@ -23,3 +23,10 @@ export function register(data) {
         data
     });
 }
+
+export function userLogout() {
+    return service({
+        url: "/auth/logout",
+        method: "post"
+    });
+}
