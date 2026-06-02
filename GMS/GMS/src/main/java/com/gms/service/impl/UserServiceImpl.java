@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gms.pojo.User;
 import com.gms.service.UserService;
+import com.gms.service.OperationLogService;
 import com.gms.mapper.UserMapper;
 import com.gms.utils.JwtHelper;
 import com.gms.utils.Result;
@@ -29,6 +30,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private UserMapper userMapper;
     @Autowired
     private JwtHelper jwtHelper;
+    @Autowired
+    private OperationLogService operationLogService;
 
     @Override
     public User findByUsername(String username) {
@@ -134,6 +137,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             if (needUpdate) {
                 boolean success = this.updateById(existingUser);
                 if (success) {
+                    operationLogService.log(id, existingUser.getUsername(), "更新用户", "用户管理",
+                        "更新用户: " + existingUser.getUsername(), null);
                     return Result.success("更新成功");
                 } else {
                     return Result.error("更新失败");
@@ -156,6 +161,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
             boolean success = this.removeById(id);
             if (success) {
+                operationLogService.log(id, existingUser.getUsername(), "删除用户", "用户管理",
+                    "删除用户: " + existingUser.getUsername(), null);
                 return Result.success("删除成功");
             } else {
                 return Result.error("删除失败");
