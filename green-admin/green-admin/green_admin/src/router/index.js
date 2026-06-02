@@ -35,7 +35,8 @@ const routes = [
             { path: 'plants', component: () => import('@/home/PlantsBox.vue') },
             { path: 'users', component: () => import('@/home/UserBox.vue') },
             { path: 'plantrecord', component: () => import('@/home/PlantsRecord.vue') },
-            { path: 'Maintenancerecord', component: () => import('@/home/MaintenanceRecord.vue') }
+            { path: 'Maintenancerecord', component: () => import('@/home/MaintenanceRecord.vue') },
+            { path: 'profile', component: () => import('@/home/Profile.vue') }
         ]
     },
     // 根路径重定向到登录页

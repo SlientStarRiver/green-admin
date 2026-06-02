@@ -14,7 +14,8 @@
           </div>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item @click.native="handleLogout">退出登录</el-dropdown-item>
+              <el-dropdown-item @click.native="goProfile">个人中心</el-dropdown-item>
+              <el-dropdown-item @click.native="handleLogout" divided>退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -108,6 +109,9 @@ export default {
     // 点击头像：无条件跳转到登录页（忽略当前登录状态）
     goLogin() {
       this.$router.push('/LoginBox');
+    },
+    goProfile() {
+      this.$router.push('/HeadWeb/profile');
     },
     handleLogout() {
       removeToken();

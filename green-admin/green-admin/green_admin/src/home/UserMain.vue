@@ -12,7 +12,8 @@
           </div>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item @click.native="handleLogout">退出登录</el-dropdown-item>
+              <el-dropdown-item @click.native="goProfile">个人中心</el-dropdown-item>
+              <el-dropdown-item @click.native="handleLogout" divided>退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -43,6 +44,7 @@
         <UserHomeBox v-if="activeView === 'UserHomeBox'" />
         <MaintenanceRecord v-if="activeView === 'Maintenancerecord'" />
         <PlantsRecord v-if="activeView === 'plantrecord'" />
+        <Profile v-if="activeView === 'profile'" />
       </el-main>
     </div>
   </el-container>
@@ -54,11 +56,12 @@ import { userLogout } from '@/api/api/login'
 import UserHomeBox from '@/home/UserHomeBox.vue'
 import PlantsRecord from '@/home/PlantsRecord.vue'
 import MaintenanceRecord from '@/home/MaintenanceRecord.vue'
+import Profile from '@/home/Profile.vue'
 import img1 from '@/assets/img/白底头像.jpg'
 import img2 from '@/assets/img/img4.png'
 
 export default {
-  components: { PlantsRecord, MaintenanceRecord, UserHomeBox },
+  components: { PlantsRecord, MaintenanceRecord, UserHomeBox, Profile },
   data() {
     return {
       activeView: 'UserHomeBox',
@@ -85,6 +88,10 @@ export default {
         this.activeView = 'Maintenancerecord'
         this.activeMenu = 'records-2'
       }
+    },
+    goProfile() {
+      this.activeView = 'profile'
+      this.activeMenu = ''
     },
     async handleLogout() {
       try {

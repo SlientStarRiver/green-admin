@@ -30,3 +30,19 @@ export function userLogout() {
         method: "post"
     });
 }
+
+export function getUserInfo(userId) {
+    return service({
+        url: "/auth/user/info",
+        method: "get",
+        params: { userId }
+    });
+}
+
+export function changePassword(data) {
+    return service({
+        url: "/auth/change-password",
+        method: "post",
+        data
+    });
+}

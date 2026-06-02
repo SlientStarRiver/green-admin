@@ -4,9 +4,9 @@ import com.gms.pojo.User;
 import com.gms.service.UserService;
 import com.gms.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 import java.util.Map;
 
@@ -86,5 +86,38 @@ public class AuthController {
     @PostMapping("/auth/logout")
     public Result logout() {
         return userService.logout();
+    }
+
+    /**
+     * 获取当前用户信息
+     * URL: /auth/user/info
+     * 方法: GET
+     */
+    @GetMapping("/auth/user/info")
+    public Result getUserInfo(@RequestParam Long userId) {
+        return userService.getUserInfo(userId);
+    }
+
+    /**
+     * 修改密码
+     * URL: /auth/change-password
+     * 方法: POST
+     */
+    @PostMapping("/auth/change-password")
+    public Result changePassword(@RequestBody Map<String, String> data) {
+        String userIdStr = data.get("userId");
+        String oldPassword = data.get("oldPassword");
+        String newPassword = data.get("newPassword");
+
+        if (userIdStr == null || oldPassword == null || newPassword == null) {
+            return Result.error("参数不完整");
+        }
+
+        try {
+            Long userId = Long.parseLong(userIdStr);
+            return userService.changePassword(userId, oldPassword, newPassword);
+        } catch (NumberFormatException e) {
+            return Result.error("用户ID格式错误");
+        }
     }
 }

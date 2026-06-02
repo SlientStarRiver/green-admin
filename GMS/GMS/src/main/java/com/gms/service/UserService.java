@@ -19,4 +19,6 @@ public interface UserService extends IService<User> {
     Result userlogin(String username, String password);
     Result adminlogin(String username, String password);
     Result logout();
+    Result changePassword(Long userId, String oldPassword, String newPassword);
+    Result getUserInfo(Long userId);
 }

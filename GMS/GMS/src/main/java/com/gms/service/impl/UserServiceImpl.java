@@ -259,13 +259,47 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public Result logout() {
         try {
-            // 在实际项目中，这里应该处理token失效等逻辑
             return Result.success("登出成功");
         } catch (Exception e) {
             return Result.error("登出失败: " + e.getMessage());
         }
     }
 
+    @Override
+    public Result changePassword(Long userId, String oldPassword, String newPassword) {
+        try {
+            User user = this.getById(userId);
+            if (user == null) {
+                return Result.error("用户不存在");
+            }
+
+            String encryptedOld = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
+            if (!user.getPassword().equals(encryptedOld)) {
+                return Result.error("原密码错误");
+            }
+
+            String encryptedNew = DigestUtils.md5DigestAsHex(newPassword.getBytes());
+            user.setPassword(encryptedNew);
+            boolean success = this.updateById(user);
+            return success ? Result.success("密码修改成功") : Result.error("密码修改失败");
+        } catch (Exception e) {
+            return Result.error("密码修改失败: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Result getUserInfo(Long userId) {
+        try {
+            User user = this.getById(userId);
+            if (user == null) {
+                return Result.error("用户不存在");
+            }
+            user.setPassword(null);
+            return Result.success(user);
+        } catch (Exception e) {
+            return Result.error("获取用户信息失败: " + e.getMessage());
+        }
+    }
 }
 
 
