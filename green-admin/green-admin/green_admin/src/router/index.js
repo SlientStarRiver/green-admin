@@ -75,8 +75,6 @@ router.beforeEach((to, from, next) => {
 
     if (!token && !isPublic) {
         next('/LoginBox');
-    } else if (isPublic && token) {
-        next('/LoginBox');
     } else {
         next();
     }
